@@ -81,3 +81,66 @@ for word, i in word_index.items():
 
 
 print(len(embeddings_matrix))
+
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Embedding(vocab_size+1, embedding_dim, input_length=max_length, weights=[embeddings_matrix], trainable=False),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+
+])
+model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy'])
+model.summary()
+
+num_epochs = 50
+training_padded = np.array(training_sequences)
+training_labels = np.array(training_labels)
+testing_padded = np.array(test_sequences)
+testing_labels = np.array(test_labels)
+
+history = model.fit(training_padded, training_labels, epochs=num_epochs, validation_data=(testing_padded, testing_labels), verbose=2)
+
+print("Training Complete")
+
+import matplotlib.image  as mpimg
+import matplotlib.pyplot as plt
+
+#-----------------------------------------------------------
+# Retrieve a list of list results on training and test data
+# sets for each training epoch
+#-----------------------------------------------------------
+acc=history.history['accuracy']
+val_acc=history.history['val_accuracy']
+loss=history.history['loss']
+val_loss=history.history['val_loss']
+
+epochs=range(len(acc)) # Get number of epochs
+
+#------------------------------------------------
+# Plot training and validation accuracy per epoch
+#------------------------------------------------
+plt.plot(epochs, acc, 'r')
+plt.plot(epochs, val_acc, 'b')
+plt.title('Training and validation accuracy')
+plt.xlabel("Epochs")
+plt.ylabel("Accuracy")
+plt.legend(["Accuracy", "Validation Accuracy"])
+
+plt.figure()
+
+#------------------------------------------------
+# Plot training and validation loss per epoch
+#------------------------------------------------
+plt.plot(epochs, loss, 'r')
+plt.plot(epochs, val_loss, 'b')
+plt.title('Training and validation loss')
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend(["Loss", "Validation Loss"])
+
+plt.figure()
+
+
+# Expected Output
+# A chart where the validation loss does not increase sharply!
