@@ -1,3 +1,6 @@
+# face detection and image extraction to text
+
+
 from zipfile import ZipFile
 from IPython.display import display
 import PIL
