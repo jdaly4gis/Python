@@ -21,11 +21,11 @@ class ButtonClass1(object):
         try:
 
             desc  = arcpy.Describe(fc)
-                onums = desc.FIDset
+            onums = desc.FIDset
             nums_list = onums.split(';')
 
 
-            conn = pyodbc.connect('Driver={SQL Server};Server=th-govsql;Database=govern;UID=XXX;PWD=XXX;Trusted_Connection=no;')
+            conn = pyodbc.connect('Driver={SQL Server};Server=th-govsql;Database=XXX;UID=XXX;PWD=XXX;Trusted_Connection=no;')
                 cursor = conn.cursor()
 
             with arcpy.da.SearchCursor(fc, ['PARCEL_ID']) as c:
